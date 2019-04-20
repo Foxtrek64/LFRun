@@ -1,0 +1,60 @@
+﻿<Window x:Class="LFRun.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LFRun"
+        mc:Ignorable="d"
+        Title="About" Height="Auto" Width="400"
+        SizeToContent="Height"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right">Name:</Label>
+        <Label Grid.Row="0" Grid.Column="1" Content="{Binding ProjectAttributes.Title}" />
+
+        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Top">Description:</Label>
+        <Label Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="{Binding ProjectAttributes.Description}" TextWrapping="Wrap"/>
+        </Label>
+
+        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Version:</Label>
+        <Label Grid.Row="2" Grid.Column="1" Content="{Binding ProjectAttributes.Version}" />
+
+        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Right">Developed by:</Label>
+        <Label Grid.Row="3" Grid.Column="1" Content="{Binding ProjectAttributes.Company}" />
+
+        <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Right">Released under:</Label>
+        <Label Grid.Row="4" Grid.Column="1">MIT License</Label>
+
+        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Right">Credits</Label>
+
+        <Label Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Right">"Run" icon:</Label>
+        <Label Grid.Row="6" Grid.Column="1" ToolTip="https://www.iconfinder.com/icons/97912/run_icon">
+            <TextBlock TextWrapping="Wrap">
+                <Hyperlink NavigateUri="https://www.iconfinder.com/icons/97912/run_icon">Licensed under Creative Commons</Hyperlink>
+            </TextBlock>
+        </Label>
+
+        <Grid Grid.Row="7" Grid.ColumnSpan="2" Background="#FFEEEEEE">
+            <Button HorizontalAlignment="Right" Margin="8 18" Width="80" Height="24" IsDefault="True" Command="{Binding CloseCommand}">OK</Button>
+        </Grid>
+    </Grid>
+    
+</Window>
