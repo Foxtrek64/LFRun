@@ -8,7 +8,7 @@
         Title="About" Height="Auto" Width="400"
         SizeToContent="Height"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -16,6 +16,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -52,7 +53,14 @@
             </TextBlock>
         </Label>
 
-        <Grid Grid.Row="7" Grid.ColumnSpan="2" Background="#FFEEEEEE">
+        <Label Grid.Row="7" Grid.Column="0" HorizontalContentAlignment="Right">See More:</Label>
+        <Label Grid.Row="7" Grid.Column="1" ToolTip="https://github.com/LuzFaltex/LFRun">
+            <TextBlock TextWrapping="Wrap">
+                <Hyperlink NavigateUri="https://github.com/LuzFaltex/LFRun">GitHub</Hyperlink>
+            </TextBlock>
+        </Label>
+
+        <Grid Grid.Row="8" Grid.ColumnSpan="2" Background="#FFEEEEEE">
             <Button HorizontalAlignment="Right" Margin="8 18" Width="80" Height="24" IsDefault="True" Command="{Binding CloseCommand}">OK</Button>
         </Grid>
     </Grid>

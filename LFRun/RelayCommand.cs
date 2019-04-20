@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LFRun
@@ -39,10 +35,7 @@ namespace LFRun
         /// <param name="canExecute">The execution status logic.</param>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
-            if (execute == null)
-                throw new ArgumentNullException(nameof(execute));
-
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 

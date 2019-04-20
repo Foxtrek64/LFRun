@@ -37,13 +37,7 @@
             <Label Grid.Row="1" Grid.Column="0" Content="_Open:" Margin="0 20" HorizontalAlignment="Center" />
             <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="InputComboBox" Margin="0 20 18 20"></ComboBox>
 
-            <Grid Grid.Row="2" Grid.Column="0" Background="#FFEEEEEE">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Hyperlink Command="{Binding AboutCommand}">About</Hyperlink>
-                </TextBlock>
-            </Grid>
-
-            <Grid Grid.Row="2" Grid.Column="1"  Background="#FFEEEEEE">
+            <Grid Grid.Row="2" Grid.ColumnSpan="2"  Background="#FFEEEEEE">
                 <Grid.Resources>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Margin" Value="4 18"/>
