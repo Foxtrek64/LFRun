@@ -8,7 +8,6 @@ namespace LFRun
     /// </summary>
     /// <typeparam name="T">The type of data used by the command</typeparam>
     public class RelayCommand<T> : ICommand
-        where T : class
     {
         #region Fields
 

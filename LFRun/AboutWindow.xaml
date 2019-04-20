@@ -44,7 +44,7 @@
         <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Right">Released under:</Label>
         <Label Grid.Row="4" Grid.Column="1">MIT License</Label>
 
-        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Right">Credits</Label>
+        <Label Grid.Row="5" Grid.ColumnSpan="2" HorizontalContentAlignment="Center"> -- Credits -- </Label>
 
         <Label Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Right">"Run" icon:</Label>
         <Label Grid.Row="6" Grid.Column="1" ToolTip="https://www.iconfinder.com/icons/97912/run_icon">

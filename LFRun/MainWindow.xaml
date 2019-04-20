@@ -6,61 +6,82 @@
         xmlns:local="clr-namespace:LFRun"
         mc:Ignorable="d"
         Title="Run (As Administrator)" Height="Auto" Width="410" SizeToContent="Height"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        >
     <Window.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="LFRun" UriSource="Resources/LFRun.ico" />
+            <local:BooleanToVisibilityConverter
+                x:Key="BoolToVis"
+                TrueValue="Visible" FalseValue="Hidden" />
         </ResourceDictionary>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="F1" Command="{Binding AboutCommand}" />
+        <KeyBinding Key="LeftAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
+        <KeyBinding Key="RightAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
     </Window.InputBindings>
     <Border BorderThickness="0 1 0 0" BorderBrush="#11000000">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+        <DockPanel LastChildFill="True">
+            <Menu Name="MainMenu" DockPanel.Dock="Top" 
+                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"
+                  LostFocus="MainMenu_OnLostFocus">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_About..." Command="{Binding AboutCommand}" />
+                    <MenuItem Header="_Options">
+                        <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}" Command="{Binding SaveHistoryCheckedCommand}" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="E_xit" Command="{Binding CancelCommand}" />
+                </MenuItem>
+            </Menu>
 
-            <Image Grid.Row="0" Grid.Column="0" Source="{StaticResource LFRun}" Width="36" Height="36" Stretch="Uniform" Margin="0 16 0 0"/>
-            <Label Grid.Row="0" Grid.Column="1" Margin="0 16 0 0">
-                <TextBlock TextWrapping="Wrap">
-                    Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.
-                </TextBlock>
-            </Label>
-
-            <Label Grid.Row="1" Grid.Column="0" Content="_Open:" Margin="0 20" HorizontalAlignment="Center" />
-            <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="InputComboBox" Margin="0 20 18 20"></ComboBox>
-
-            <Grid Grid.Row="2" Grid.ColumnSpan="2"  Background="#FFEEEEEE">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Margin" Value="4 18"/>
-                        <Setter Property="MinWidth" Value="80" />
-                        <Setter Property="Height" Value="24"></Setter>
-                    </Style>
-                </Grid.Resources>
-
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="64" />
                     <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
+                <Image Grid.Row="0" Grid.Column="0" Source="{StaticResource LFRun}" Width="36" Height="36" Stretch="Uniform" Margin="0 16 0 0"/>
+                <Label Grid.Row="0" Grid.Column="1" Margin="0 16 0 0">
+                    <TextBlock TextWrapping="Wrap">
+                        Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.
+                    </TextBlock>
+                </Label>
 
-                <Button Grid.Column="1" Name="OkButton" IsDefault="True"
+                <Label Grid.Row="1" Grid.Column="0" Content="_Open:" Margin="0 20" HorizontalAlignment="Center" />
+                <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="InputComboBox" Margin="0 20 18 20" />
+
+                <Grid Grid.Row="2" Grid.ColumnSpan="2"  Background="#FFEEEEEE">
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Margin" Value="4 18"/>
+                            <Setter Property="MinWidth" Value="80" />
+                            <Setter Property="Height" Value="24"></Setter>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Button Grid.Column="1" Name="OkButton" IsDefault="True"
                         IsEnabled="{Binding ElementName=InputComboBox, Path=Text.Length, Mode=OneWay}"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="{Binding ElementName=InputComboBox, Path=Text}" Content="{Binding RunButtonText}"/>
-                <Button Grid.Column="2" Name="CancelButton" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Column="3" Name="BrowseButton" Margin="4 18 8 18">_Browse...</Button>
+                    <Button Grid.Column="2" Name="CancelButton" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
+                    <Button Grid.Column="3" Name="BrowseButton" Margin="4 18 8 18">_Browse...</Button>
+                </Grid>
             </Grid>
-        </Grid>
+        </DockPanel>
     </Border>
 </Window>

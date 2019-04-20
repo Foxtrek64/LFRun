@@ -50,7 +50,7 @@ namespace LFRun
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-            IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
             uint styles = GetWindowLong(hwnd, GWL_STYLE);
             styles &= 0xFFFFFFFF ^ (WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
             SetWindowLong(hwnd, GWL_STYLE, styles);
@@ -78,6 +78,23 @@ namespace LFRun
                 handled = true;
             }
             return IntPtr.Zero;
+        }
+
+        private void MainMenu_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
+
+            mwvm.ShowMenu = false;
+        }
+
+        private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.System && (e.SystemKey == Key.LeftAlt || e.SystemKey == Key.RightAlt))
+            {
+                MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
+
+                mwvm.ShowMenuCommand.Execute(null);
+            }
         }
     }
 }
