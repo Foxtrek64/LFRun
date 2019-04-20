@@ -64,7 +64,6 @@
     </Compile>
     <Compile Include="ProjectAttributes.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="Utilities.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="AboutWindow.xaml">

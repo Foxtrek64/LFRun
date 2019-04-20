@@ -31,7 +31,8 @@ namespace LFRun
         {
             return Assembly.GetEntryAssembly()
                 .GetCustomAttributes(typeof(TAttribute))
-                .SingleOrDefault() as TAttribute;
+                .OfType<TAttribute>()
+                .SingleOrDefault();
         }
     }
 }
