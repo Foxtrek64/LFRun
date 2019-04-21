@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Run (As Administrator)" Height="Auto" Width="410" SizeToContent="Height"
         ResizeMode="NoResize"
-        >
+        KeyUp="MainWindow_OnKeyUp">
     <Window.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="LFRun" UriSource="Resources/LFRun.ico" />
@@ -18,15 +18,12 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="F1" Command="{Binding AboutCommand}" />
-        <KeyBinding Key="LeftAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
-        <KeyBinding Key="RightAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
     </Window.InputBindings>
     <Border BorderThickness="0 1 0 0" BorderBrush="#11000000">
         <DockPanel LastChildFill="True">
             <Menu Name="MainMenu" DockPanel.Dock="Top" 
-                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"
-                  LostFocus="MainMenu_OnLostFocus">
-                <MenuItem Header="_File">
+                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"> 
+                <MenuItem Header="_File" SubmenuClosed="MenuItem_Hide">
                     <MenuItem Header="_About..." Command="{Binding AboutCommand}" />
                     <MenuItem Header="_Options">
                         <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}" Command="{Binding SaveHistoryCheckedCommand}" />
@@ -49,7 +46,7 @@
 
                 <Image Grid.Row="0" Grid.Column="0" Source="{StaticResource LFRun}" Width="36" Height="36" Stretch="Uniform" Margin="0 16 0 0"/>
                 <Label Grid.Row="0" Grid.Column="1" Margin="0 16 0 0">
-                    <TextBlock TextWrapping="Wrap">
+                    <TextBlock TextWrapping="Wrap" HorizontalAlignment="Right">
                         Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.
                     </TextBlock>
                 </Label>

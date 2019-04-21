@@ -23,8 +23,6 @@ namespace LFRun.ViewModels
 
         public ICommand SaveHistoryCheckedCommand { get; }
 
-        public ICommand ShowMenuCommand { get; }
-
         private string _runButtonText = "Run";
 
         public string RunButtonText
@@ -49,7 +47,7 @@ namespace LFRun.ViewModels
             set => SetProperty(ref _history, value);
         }
 
-        private bool _showMenu;
+        private bool _showMenu = false;
         public bool ShowMenu
         {
             get => _showMenu;
@@ -74,9 +72,6 @@ namespace LFRun.ViewModels
 
             SaveHistoryCheckedCommand = new RelayCommand(
                 param => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
-
-            ShowMenuCommand = new RelayCommand(
-                _ => ShowMenu = !ShowMenu);
 
             _saveHistory = GetShouldSaveHistory();
 
