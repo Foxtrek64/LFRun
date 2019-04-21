@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Security.AccessControl;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using Microsoft.Win32;
 
@@ -22,8 +18,6 @@ namespace LFRun.ViewModels
         public ICommand ExecuteCommand { get; }
 
         public ICommand SaveHistoryCheckedCommand { get; }
-
-        public ICommand ShowMenuCommand { get; }
 
         private string _runButtonText = "Run";
 
@@ -49,7 +43,7 @@ namespace LFRun.ViewModels
             set => SetProperty(ref _history, value);
         }
 
-        private bool _showMenu;
+        private bool _showMenu = false;
         public bool ShowMenu
         {
             get => _showMenu;
@@ -73,10 +67,7 @@ namespace LFRun.ViewModels
                 param => !string.IsNullOrWhiteSpace(param));
 
             SaveHistoryCheckedCommand = new RelayCommand(
-                param => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
-
-            ShowMenuCommand = new RelayCommand(
-                _ => ShowMenu = !ShowMenu);
+                _ => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
 
             _saveHistory = GetShouldSaveHistory();
 

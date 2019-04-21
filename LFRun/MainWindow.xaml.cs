@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using LFRun.ViewModels;
@@ -44,7 +45,7 @@ namespace LFRun
         {
             Left = 0;
             Top = SystemParameters.WorkArea.Height - ActualHeight;
-            InputComboBox.Focus();    
+            InputComboBox.Focus(); 
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -80,21 +81,21 @@ namespace LFRun
             return IntPtr.Zero;
         }
 
-        private void MainMenu_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
-
-            mwvm.ShowMenu = false;
-        }
-
         private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.System && (e.SystemKey == Key.LeftAlt || e.SystemKey == Key.RightAlt))
             {
                 MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
 
-                mwvm.ShowMenuCommand.Execute(null);
+                mwvm.ShowMenu = !mwvm.ShowMenu;
             }
+        }
+
+        private void MenuItem_Hide(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
+
+            mwvm.ShowMenu = false;
         }
     }
 }
