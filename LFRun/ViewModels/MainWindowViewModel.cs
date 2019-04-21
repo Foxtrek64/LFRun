@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Security.AccessControl;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using Microsoft.Win32;
 
@@ -71,7 +67,7 @@ namespace LFRun.ViewModels
                 param => !string.IsNullOrWhiteSpace(param));
 
             SaveHistoryCheckedCommand = new RelayCommand(
-                param => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
+                _ => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
 
             _saveHistory = GetShouldSaveHistory();
 
