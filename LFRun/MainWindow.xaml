@@ -46,7 +46,7 @@
 
                 <Image Grid.Row="0" Grid.Column="0" Source="{StaticResource LFRun}" Width="36" Height="36" Stretch="Uniform" Margin="0 16 0 0"/>
                 <Label Grid.Row="0" Grid.Column="1" Margin="0 16 0 0">
-                    <TextBlock TextWrapping="Wrap" HorizontalAlignment="Right">
+                    <TextBlock TextWrapping="Wrap">
                         Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.
                     </TextBlock>
                 </Label>
