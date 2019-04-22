@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using LFRun.Commands;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LFRun
@@ -15,8 +16,7 @@ namespace LFRun
         public AboutWindow()
         {
             CloseCommand = new RelayCommand(
-                _ => Close(),
-                _ => true);
+                _ => Close());
 
             ProjectAttributes = new ProjectAttributes();
             InitializeComponent();

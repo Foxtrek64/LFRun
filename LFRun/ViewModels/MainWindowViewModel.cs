@@ -2,28 +2,35 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Security.AccessControl;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using LFRun.Commands;
+using LFRun.PowershellTools;
+using LFRun.Utilities;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace LFRun.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly MainWindow _mainWindow;
-
         public ICommand AboutCommand { get; }
 
         public ICommand CancelCommand { get; }
 
         public ICommand ExecuteCommand { get; }
 
-        public ICommand SaveHistoryCheckedCommand { get; }
-
         public ICommand ShowMenuCommand { get; }
+
+        public ICommand InputComboBoxLoaded { get; }
+
+        public ICommand SaveHistoryMenuItemLoaded { get; }
+
+        public ICommand MenuItemLostFocusCommand { get; }
 
         private string _runButtonText = "Run";
 
@@ -38,84 +45,99 @@ namespace LFRun.ViewModels
         public bool SaveHistory
         {
             get => _saveHistory;
-            set => SetProperty(ref _saveHistory, value);
+            set
+            {
+                if (SetProperty(ref _saveHistory, value))
+                    RegistryUtilities.WriteRegistry("SaveHistory", value ? 1 : 0, RegistryValueKind.DWord);
+            }
         }
 
-        private ObservableCollection<CollectionViewSource> _history;
+        private string _inputComboBoxText = "";
 
-        public ObservableCollection<CollectionViewSource> History
+        public string InputComboBoxText
         {
-            get => _history;
-            set => SetProperty(ref _history, value);
+            get => _inputComboBoxText;
+            set => SetProperty(ref _inputComboBoxText, value);
         }
 
-        private bool _showMenu;
+        private readonly ObservableCollection<CommandRecord> _history;
+
+        public IReadOnlyCollection<CommandRecord> History { get; }
+
+        private bool _showMenu = false;
         public bool ShowMenu
         {
             get => _showMenu;
             set => SetProperty(ref _showMenu, value);
         }
 
-        private const string _configRegistryKey = @"Software\LuzFaltex\LFRun";
-
         public MainWindowViewModel()
         {
-            _mainWindow = (MainWindow)Application.Current.MainWindow;
-
             AboutCommand = new RelayCommand(
                 param => new AboutWindow().ShowDialog());
 
             CancelCommand = new RelayCommand(
-                _ => _mainWindow.Close());
+                _ => Application.Current.MainWindow.Close());
 
-            ExecuteCommand = new RelayCommand<string>(
-                ExecuteUserInput,
-                param => !string.IsNullOrWhiteSpace(param));
+            ExecuteCommand = new RelayCommand(
+                _ =>
+                {
+                    Application.Current.MainWindow.Hide();
+                    var result = new CommandHandler(InputComboBoxText).Execute();
 
-            SaveHistoryCheckedCommand = new RelayCommand(
-                param => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
+                    if (result.Success)
+                    {
+                        var command = new CommandRecord(InputComboBoxText);
 
-            ShowMenuCommand = new RelayCommand(
-                _ => ShowMenu = !ShowMenu);
+                        // Contains uses the default equality check for CommandRecord.
+                        // The default equality check for CommandRecord is timestamp-agnostic.
+                        // Rather, it compares the command string.
+                        // So, we abuse this - if the command string exists, delete it. We'll replace it in the next step.
+                        if (_history.Contains(command))
+                            _history.Remove(command);
 
-            _saveHistory = GetShouldSaveHistory();
+                        _history.Add(new CommandRecord(InputComboBoxText));
 
+                        if (SaveHistory)
+                        {
+                            List<CommandRecord> history =
+                                History
+                                    .OrderBy(o => o.CommandDate)
+                                    .ToList()
+                                    .GetRange(0, Math.Min(History.Count, 50));
+
+                            string json = JsonConvert.SerializeObject(history);
+
+                            RegistryUtilities.WriteRegistry("History", json, RegistryValueKind.String);
+                        }
+
+                        Application.Current.MainWindow.Close();
+                    }
+                    else
+                    {
+                        Application.Current.MainWindow.Show();
+                        MessageBox.Show($"User ran: {InputComboBoxText}{Environment.NewLine}{Environment.NewLine}{result.Exception.ToString()}", "An error has occurred");
+                    }
+                },
+                _ => !string.IsNullOrWhiteSpace(InputComboBoxText));
+
+            InputComboBoxLoaded = new RelayCommand(
+                _ => GetCommandHistory()
+                    .ForEach(_history.Add));
+
+            SaveHistoryMenuItemLoaded = new RelayCommand(
+                _ => SaveHistory = Convert.ToBoolean(RegistryUtilities.ReadRegistry("SaveHistory", 1).As<int>()));
+
+            MenuItemLostFocusCommand = new RelayCommand(
+                _ => ShowMenu = false);
+
+            _history = new ObservableCollection<CommandRecord>();
+
+            History = new ReadOnlyObservableCollection<CommandRecord>(_history);
         }
 
-        public void ExecuteUserInput(string command)
-        {
-            MessageBox.Show(command);
-        }
-
-        private static bool GetShouldSaveHistory()
-        {
-            object shouldSave = ReadRegistry("SaveHistory");
-
-            if (null == shouldSave)
-                WriteRegistry("SaveHistory", 1, RegistryValueKind.DWord);
-
-            return true;
-        }
-
-        private static object ReadRegistry(string valueName, object defaultValue = null)
-        {
-            using (RegistryKey reg = Registry.CurrentUser.OpenSubKey(_configRegistryKey))
-            {
-                return reg?.GetValue(valueName, defaultValue);
-            }
-        }
-
-        private static void WriteRegistry(string valueName, object value, RegistryValueKind kind)
-        {
-            valueName = valueName ?? throw new ArgumentNullException(nameof(valueName));
-            value = value ?? throw new ArgumentNullException(nameof(value));
-
-            using (RegistryKey reg = Registry.CurrentUser.OpenSubKey(_configRegistryKey, true))
-            {
-                var reg2 = reg ?? Registry.CurrentUser.CreateSubKey(_configRegistryKey, true);
-
-                reg2.SetValue(valueName, value, kind);
-            }
-        }
+        public static List<CommandRecord> GetCommandHistory()
+            => JsonConvert.DeserializeObject<List<CommandRecord>>(
+                RegistryUtilities.ReadRegistry("History", "[]").As<string>());
     }
 }

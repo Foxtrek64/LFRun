@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace LFRun
+namespace LFRun.Commands
 {
     /// <summary>
     /// A generic command that can be wired into the MVVM pattern.

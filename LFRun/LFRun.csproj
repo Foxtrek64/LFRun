@@ -46,6 +46,13 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\PowerShell\6\System.Management.Automation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,8 +75,16 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BooleanToVisibilityConverter.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="CommandRecord.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
+    <Compile Include="PowershellTools\ExecutionResult.cs" />
+    <Compile Include="PowershellTools\ExecutionTools.cs" />
+    <Compile Include="PowershellTools\IResult.cs" />
+    <Compile Include="PowershellTools\PowershellTools.cs" />
     <Compile Include="ProjectAttributes.cs" />
-    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Utilities\RegistryUtilities.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="AboutWindow.xaml">
@@ -119,5 +134,6 @@
   <ItemGroup>
     <Resource Include="Resources\LFRun.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

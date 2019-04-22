@@ -3,7 +3,9 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using LFRun.Utilities;
 using LFRun.ViewModels;
+using Microsoft.Win32;
 
 namespace LFRun
 {
@@ -35,6 +37,10 @@ namespace LFRun
 
         public MainWindow()
         {
+            // Ensure data contracts
+            RegistryUtilities.EnsureRegistryContract("SaveHistory", 1, RegistryValueKind.DWord);
+            RegistryUtilities.EnsureRegistryContract("History", "[]", RegistryValueKind.String);
+
             DataContext = new MainWindowViewModel();
             Loaded += MainWindow_Loaded;
             InitializeComponent();
@@ -80,21 +86,21 @@ namespace LFRun
             return IntPtr.Zero;
         }
 
-        private void MainMenu_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
-
-            mwvm.ShowMenu = false;
-        }
-
         private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.System && (e.SystemKey == Key.LeftAlt || e.SystemKey == Key.RightAlt))
             {
                 MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
 
-                mwvm.ShowMenuCommand.Execute(null);
+                mwvm.ShowMenu = !mwvm.ShowMenu;
             }
+        }
+
+        private void MainMenu_Closed(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel mwvm = (MainWindowViewModel)DataContext;
+
+            mwvm.ShowMenu = !mwvm.ShowMenu;
         }
     }
 }

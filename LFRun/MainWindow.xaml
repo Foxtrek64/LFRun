@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:LFRun"
         mc:Ignorable="d"
         Title="Run (As Administrator)" Height="Auto" Width="410" SizeToContent="Height"
         ResizeMode="NoResize"
-        >
+        KeyUp="MainWindow_OnKeyUp">
     <Window.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="LFRun" UriSource="Resources/LFRun.ico" />
@@ -18,18 +19,26 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="F1" Command="{Binding AboutCommand}" />
-        <KeyBinding Key="LeftAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
-        <KeyBinding Key="RightAlt" Modifiers="Alt" Command="{Binding ShowMenuCommand}" />
     </Window.InputBindings>
     <Border BorderThickness="0 1 0 0" BorderBrush="#11000000">
         <DockPanel LastChildFill="True">
             <Menu Name="MainMenu" DockPanel.Dock="Top" 
-                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"
-                  LostFocus="MainMenu_OnLostFocus">
+                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}">
                 <MenuItem Header="_File">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SubmenuClosed">
+                            <i:InvokeCommandAction Command="{Binding MenuItemLostFocusCommand}"></i:InvokeCommandAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <MenuItem Header="_About..." Command="{Binding AboutCommand}" />
                     <MenuItem Header="_Options">
-                        <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}" Command="{Binding SaveHistoryCheckedCommand}" />
+                        <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding SaveHistoryMenuItemLoaded}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </MenuItem>
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="E_xit" Command="{Binding CancelCommand}" />
@@ -55,9 +64,18 @@
                 </Label>
 
                 <Label Grid.Row="1" Grid.Column="0" Content="_Open:" Margin="0 20" HorizontalAlignment="Center" />
-                <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="InputComboBox" Margin="0 20 18 20" />
+                <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="InputComboBox"
+                          Margin="0 20 18 20"
+                          Text="{Binding InputComboBoxText}"
+                          ItemsSource="{Binding History}" DisplayMemberPath="Command">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <i:InvokeCommandAction Command="{Binding InputComboBoxLoaded}"></i:InvokeCommandAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
 
-                <Grid Grid.Row="2" Grid.ColumnSpan="2"  Background="#FFEEEEEE">
+                    <Grid Grid.Row="2" Grid.ColumnSpan="2"  Background="#FFEEEEEE">
                     <Grid.Resources>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Margin" Value="4 18"/>
@@ -76,8 +94,7 @@
 
                     <Button Grid.Column="1" Name="OkButton" IsDefault="True"
                         IsEnabled="{Binding ElementName=InputComboBox, Path=Text.Length, Mode=OneWay}"
-                        Command="{Binding ExecuteCommand}"
-                        CommandParameter="{Binding ElementName=InputComboBox, Path=Text}" Content="{Binding RunButtonText}"/>
+                        Command="{Binding ExecuteCommand}" Content="OK"/>
                     <Button Grid.Column="2" Name="CancelButton" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
                     <Button Grid.Column="3" Name="BrowseButton" Margin="4 18 8 18">_Browse...</Button>
                 </Grid>
