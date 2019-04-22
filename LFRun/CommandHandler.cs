@@ -2,8 +2,8 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace LFRun
 {
@@ -14,13 +14,16 @@ namespace LFRun
 
         public CommandHandler(string commandLine)
         {
-            /*
-            psi = new ProcessStartInfo("powershell", $"-ExecutionPolicy unrestricted \"{psScript.ToString()}\"")
+            var commandParts = ExecutionTools.CommandLineToArgs(commandLine);
+            string command = ExecutionTools.FindCommand(commandParts[0]);
+
+            psi = new ProcessStartInfo(command)
             {
-                // CreateNoWindow = true,
-                // UseShellExecute = true
+                Arguments = string.Join(" ", commandParts.Skip(1)),
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                Verb = "runas"
             };
-            */
         }
 
         /// <summary>
@@ -36,10 +39,11 @@ namespace LFRun
                 try
                 {
                     process.Start();
-                    process.WaitForExit();
-                    result = process.ExitCode == 0
-                        ? ExecutionResult.FromSuccess()
-                        : ExecutionResult.FromError(process.StandardOutput.ToString(), null);
+
+                    if (process.HasExited && process.ExitCode != 0)
+                        result = ExecutionResult.FromError(process.StandardOutput.ToString(), null);
+                    else
+                        result = ExecutionResult.FromSuccess();
                 }
                 catch (Win32Exception we)
                 {

@@ -51,13 +51,13 @@ namespace LFRun.PowershellTools
             {
                 shell.AddScript(Script);
 
-                var results =
-                    await Task<PSDataCollection<PSObject>>.Factory.FromAsync(shell.BeginInvoke(),
-                        param => shell.EndInvoke(param));
+                // var results =
+                //    await Task<PSDataCollection<PSObject>>.Factory.FromAsync(shell.BeginInvoke(),
+                //        param => shell.EndInvoke(param));
 
                 if (shell.HadErrors)
                 {
-                    MessageBox.Show(string.Join(Environment.NewLine, results), "Something went wrong!");
+                    // MessageBox.Show(string.Join(Environment.NewLine, results), "Something went wrong!");
 
                     var ex = new Exception("Something went wrong!");
                     executionResult = ExecutionResult.FromError(ex.Message, ex);

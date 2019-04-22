@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+<<<<<<< HEAD
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+=======
+>>>>>>> 176c763e35ce54a153b9c7b16dbf2de56569321a
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using LFRun.Commands;
 using LFRun.PowershellTools;
@@ -24,13 +25,17 @@ namespace LFRun.ViewModels
 
         public ICommand ExecuteCommand { get; }
 
+<<<<<<< HEAD
         public ICommand ShowMenuCommand { get; }
 
         public ICommand InputComboBoxLoaded { get; }
 
         public ICommand SaveHistoryMenuItemLoaded { get; }
 
-        public ICommand SubmenuClosedCommand { get; }
+        public ICommand MenuItemLostFocusCommand { get; }
+=======
+        public ICommand SaveHistoryCheckedCommand { get; }
+>>>>>>> 176c763e35ce54a153b9c7b16dbf2de56569321a
 
         private string _runButtonText = "Run";
 
@@ -60,10 +65,13 @@ namespace LFRun.ViewModels
             set => SetProperty(ref _inputComboBoxText, value);
         }
 
+<<<<<<< HEAD
         private readonly ObservableCollection<CommandRecord> _history;
 
         public IReadOnlyCollection<CommandRecord> History { get; }
 
+=======
+>>>>>>> 176c763e35ce54a153b9c7b16dbf2de56569321a
         private bool _showMenu = false;
         public bool ShowMenu
         {
@@ -77,14 +85,15 @@ namespace LFRun.ViewModels
                 param => new AboutWindow().ShowDialog());
 
             CancelCommand = new RelayCommand(
+<<<<<<< HEAD
                 _ => Application.Current.MainWindow.Close());
 
             ExecuteCommand = new RelayCommand(
-                _ =>
+                async _ =>
                 {
                     Application.Current.MainWindow.Hide();
-                    var result = new CommandHandler(InputComboBoxText).Execute();
-                    // var result = await new PowershellTool(InputComboBoxText).Execute();
+                    // var result = new CommandHandler(InputComboBoxText).Execute();
+                    var result = await new PowershellTool(InputComboBoxText).Execute();
 
                     if (result.Success)
                     {
@@ -116,8 +125,8 @@ namespace LFRun.ViewModels
                     }
                     else
                     {
-                        new ErrorPresenter(InputComboBoxText, result).Show();
                         Application.Current.MainWindow.Show();
+                        MessageBox.Show($"User ran: {InputComboBoxText}{Environment.NewLine}{Environment.NewLine}{result.Exception.ToString()}", "An error has occurred");
                     }
                 },
                 _ => !string.IsNullOrWhiteSpace(InputComboBoxText));
@@ -129,12 +138,25 @@ namespace LFRun.ViewModels
             SaveHistoryMenuItemLoaded = new RelayCommand(
                 _ => SaveHistory = Convert.ToBoolean(RegistryUtilities.ReadRegistry("SaveHistory", 1).As<int>()));
 
-            SubmenuClosedCommand = new RelayCommand(
+            MenuItemLostFocusCommand = new RelayCommand(
                 _ => ShowMenu = false);
 
             _history = new ObservableCollection<CommandRecord>();
 
             History = new ReadOnlyObservableCollection<CommandRecord>(_history);
+=======
+                _ => _mainWindow.Close());
+
+            ExecuteCommand = new RelayCommand<string>(
+                ExecuteUserInput,
+                param => !string.IsNullOrWhiteSpace(param));
+
+            SaveHistoryCheckedCommand = new RelayCommand(
+                _ => WriteRegistry("SaveHistory", SaveHistory ? 1 : 0, RegistryValueKind.DWord));
+
+            _saveHistory = GetShouldSaveHistory();
+
+>>>>>>> 176c763e35ce54a153b9c7b16dbf2de56569321a
         }
 
         public static List<CommandRecord> GetCommandHistory()

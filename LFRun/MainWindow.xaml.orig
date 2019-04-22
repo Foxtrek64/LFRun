@@ -23,13 +23,18 @@
     <Border BorderThickness="0 1 0 0" BorderBrush="#11000000">
         <DockPanel LastChildFill="True">
             <Menu Name="MainMenu" DockPanel.Dock="Top" 
+<<<<<<< HEAD
                   Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}">
                 <MenuItem Header="_File">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SubmenuClosed">
-                            <i:InvokeCommandAction Command="{Binding SubmenuClosedCommand}" />
+                            <i:InvokeCommandAction Command="{Binding MenuItemLostFocusCommand}"></i:InvokeCommandAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+=======
+                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"> 
+                <MenuItem Header="_File" SubmenuClosed="MenuItem_Hide">
+>>>>>>> 176c763e35ce54a153b9c7b16dbf2de56569321a
                     <MenuItem Header="_About..." Command="{Binding AboutCommand}" />
                     <MenuItem Header="_Options">
                         <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}">
@@ -70,7 +75,7 @@
                           ItemsSource="{Binding History}" DisplayMemberPath="Command">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
-                            <i:InvokeCommandAction Command="{Binding InputComboBoxLoaded}" />
+                            <i:InvokeCommandAction Command="{Binding InputComboBoxLoaded}"></i:InvokeCommandAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>

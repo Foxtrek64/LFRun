@@ -40,6 +40,52 @@ namespace LFRun.PowershellTools
             }
         }
 
+        public static string FindCommand(string command)
+        {
+            string commandWithPath = null;
+
+            // If it's a path, let's not waste time trying to figure where the executable exists.
+            if (File.Exists(command))
+            {
+                return command;
+            }
+            else if (Directory.Exists(command))
+            {
+                FileAttributes attr = File.GetAttributes(command);
+                if (attr.HasFlag(FileAttributes.Directory))
+                    return $"start {command}";
+            }
+
+            // It's probably just a command. Let's try attaching it to a path.
+            string pathVar = Environment.GetEnvironmentVariable("PATH");
+            if (!Environment.Is64BitProcess)
+                pathVar += ";C:\\Windows\\sysnative\\";
+                // pathVar += $";{Environment.SystemDirectory}";
+
+            var paths = pathVar.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string directory in paths)
+            {
+                var d = new DirectoryInfo(directory);
+
+                if (!d.Exists)
+                    // We found a directory that's in the PATH variable that doesn't exist on the machine.
+                    // Just move on
+                    continue;
+
+                FileInfo fileMatch = d.EnumerateFiles($"{command}.*", SearchOption.TopDirectoryOnly).FirstOrDefault();
+
+                if (null != fileMatch)
+                {
+                    commandWithPath = fileMatch.FullName;
+                    break;
+                }
+            }
+
+            return commandWithPath ?? command;
+
+        }
+
         private static string[] SplitCommand(string command)
         {
             var parts = Regex.Matches(command, @"[\""].+?[\""]|[^ ]+")

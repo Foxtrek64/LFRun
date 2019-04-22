@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,6 +79,7 @@
     <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="CommandRecord.cs" />
+    <Compile Include="PowershellTools\ErrorPresenter.cs" />
     <Compile Include="PowershellTools\PowershellTool.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="PowershellTools\ExecutionResult.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="ProjectAttributes.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Utilities\RegistryUtilities.cs" />
+    <Compile Include="Utilities\TypeSwitch.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="AboutWindow.xaml">

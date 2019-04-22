@@ -26,7 +26,7 @@ namespace LFRun
 
         public static bool operator ==(CommandRecord first, CommandRecord second)
         {
-            return string.Equals(first.Command, second.Command, StringComparison.OrdinalIgnoreCase);
+            return first.Equals(second);
         }
 
         public static bool operator !=(CommandRecord first, CommandRecord second)
@@ -34,9 +34,14 @@ namespace LFRun
             return !(first == second);
         }
 
+        /// <summary>
+        /// Compares two <see cref="CommandRecord"/> <see cref="Command"/>s using <see cref="StringComparison"/>
+        /// </summary>
+        /// <param name="other">The CommandRecord to compare to this one</param>
+        /// <returns>True if the commands match; otherwise, false</returns>
         public bool Equals(CommandRecord other)
         {
-            return Command == other.Command;
+            return string.Equals(Command, other.Command, StringComparison.OrdinalIgnoreCase);
         }
 
         public override bool Equals(object other)
