@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using LFRun.Utilities;
@@ -50,7 +51,7 @@ namespace LFRun
         {
             Left = 0;
             Top = SystemParameters.WorkArea.Height - ActualHeight;
-            InputComboBox.Focus();    
+            InputComboBox.Focus(); 
         }
 
         protected override void OnSourceInitialized(EventArgs e)

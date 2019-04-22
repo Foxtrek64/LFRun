@@ -23,13 +23,9 @@
     <Border BorderThickness="0 1 0 0" BorderBrush="#11000000">
         <DockPanel LastChildFill="True">
             <Menu Name="MainMenu" DockPanel.Dock="Top" 
-                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}">
+                  Visibility="{Binding ShowMenu, Converter={StaticResource BoolToVis}}"
+                  LostFocus="MainMenu_OnLostFocus">
                 <MenuItem Header="_File">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SubmenuClosed">
-                            <i:InvokeCommandAction Command="{Binding MenuItemLostFocusCommand}"></i:InvokeCommandAction>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                     <MenuItem Header="_About..." Command="{Binding AboutCommand}" />
                     <MenuItem Header="_Options">
                         <MenuItem Header="_Save History" IsCheckable="True" IsChecked="{Binding SaveHistory}">

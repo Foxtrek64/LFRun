@@ -30,8 +30,6 @@ namespace LFRun.ViewModels
 
         public ICommand SaveHistoryMenuItemLoaded { get; }
 
-        public ICommand MenuItemLostFocusCommand { get; }
-
         private string _runButtonText = "Run";
 
         public string RunButtonText
