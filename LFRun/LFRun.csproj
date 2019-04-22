@@ -41,9 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -77,11 +78,11 @@
     <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="CommandRecord.cs" />
+    <Compile Include="PowershellTools\PowershellTool.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="PowershellTools\ExecutionResult.cs" />
     <Compile Include="PowershellTools\ExecutionTools.cs" />
     <Compile Include="PowershellTools\IResult.cs" />
-    <Compile Include="PowershellTools\PowershellTools.cs" />
     <Compile Include="ProjectAttributes.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Utilities\RegistryUtilities.cs" />

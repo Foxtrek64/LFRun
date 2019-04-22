@@ -80,10 +80,11 @@ namespace LFRun.ViewModels
                 _ => Application.Current.MainWindow.Close());
 
             ExecuteCommand = new RelayCommand(
-                _ =>
+                async _ =>
                 {
                     Application.Current.MainWindow.Hide();
-                    var result = new CommandHandler(InputComboBoxText).Execute();
+                    // var result = new CommandHandler(InputComboBoxText).Execute();
+                    var result = await new PowershellTool(InputComboBoxText).Execute();
 
                     if (result.Success)
                     {
