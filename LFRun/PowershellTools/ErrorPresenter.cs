@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -29,17 +30,35 @@ namespace LFRun.PowershellTools
                         $"{Command} is unavailable. If the location is on this PC, make sure the device or drive is connected or the disc is inserted, and then try again. If the location is on the network, make sure you're connected to the network or Internet, and then try again. If the location still can't be found, it might have been moved or deleted.",
                         "Location is not available", MessageBoxButton.OK, MessageBoxImage.Error);
                 }),
-                // TypeSwitch.Case<Win32Exception>()
-                TypeSwitch.Default(() =>
+                TypeSwitch.Case<Win32Exception>(() =>
                 {
-                    string message = Debugger.IsAttached ? $"Exception Type: {Result.Exception.GetType()}" : "";
-                    message += Environment.NewLine;
-                    message +=
-                        $"Windows cannot find '{Command}'. Make sure you typed the name correctly, and then try again.";
+                    if (((Win32Exception) Result.Exception).NativeErrorCode == 1155)
+                    {
+                        string message = Debugger.IsAttached ? $"Exception Type: {Result.Exception.GetType()}{Environment.NewLine}" : "";
+                        message += Debugger.IsAttached ? $"{Result.Exception.ToString()}{Environment.NewLine}" : "";
+                        message +=
+                            $"Windows cannot find an application with which to start '{Command}'.";
 
-                    MessageBox.Show(message,
-                        Command, MessageBoxButton.OK, MessageBoxImage.Error);
-                }));
+                        MessageBox.Show(message,
+                            Command, MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        Default();
+                    }
+                }),
+                TypeSwitch.Default(() => Default()));
+        }
+
+        private void Default()
+        {
+            string message = Debugger.IsAttached ? $"Exception Type: {Result.Exception.GetType()}{Environment.NewLine}" : "";
+            message += Debugger.IsAttached ? $"{Result.Exception.ToString()}{Environment.NewLine}" : "";
+            message +=
+                $"Windows cannot find '{Command}'. Make sure you typed the name correctly, and then try again.";
+
+            MessageBox.Show(message,
+                Command, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

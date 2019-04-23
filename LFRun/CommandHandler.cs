@@ -20,8 +20,8 @@ namespace LFRun
             psi = new ProcessStartInfo(command)
             {
                 Arguments = string.Join(" ", commandParts.Skip(1)),
-                CreateNoWindow = true,
-                UseShellExecute = false,
+                CreateNoWindow = false,
+                UseShellExecute = true,
                 Verb = "runas"
             };
         }

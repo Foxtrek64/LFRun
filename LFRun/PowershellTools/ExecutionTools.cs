@@ -43,6 +43,8 @@ namespace LFRun.PowershellTools
         public static string FindCommand(string command)
         {
             string commandWithPath = null;
+            
+            //TODO: Handle URLs
 
             // If it's a path, let's not waste time trying to figure where the executable exists.
             if (File.Exists(command))
